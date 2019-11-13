@@ -2,16 +2,23 @@ using Toybox.WatchUi;
 using Toybox.Graphics;
 using Toybox.System;
 using Toybox.Lang;
+using Toybox.Time;
+using Toybox.Time.Gregorian;
 
 class wfTerminus_v1View extends WatchUi.WatchFace {
 
+	var tfb24 = null;
+	var tfb60d= null;
+	
     function initialize() {
         WatchFace.initialize();
     }
 
     // Load your resources here
     function onLayout(dc) {
-        setLayout(Rez.Layouts.WatchFace(dc));
+    //    setLayout(Rez.Layouts.WatchFace(dc));
+    	//ftb24 = WatchUi.loadResource(Rez.Fonts.ftb24);
+    	//ftb60d = WatchUi.loadResource(Rez.Fonts.ftb60d);
     }
 
     // Called when this View is brought to the foreground. Restore
@@ -22,14 +29,21 @@ class wfTerminus_v1View extends WatchUi.WatchFace {
 
     // Update the view
     function onUpdate(dc) {
-        // Get and show the current time
-        var clockTime = System.getClockTime();
-        var timeString = Lang.format("$1$:$2$", [clockTime.hour, clockTime.min.format("%02d")]);
-        var view = View.findDrawableById("TimeLabel");
-        view.setText(timeString);
+        // Get and show the current date and time
+        var today = Gregorian.info(Time.now(), Time.FORMAT_MEDIUM);
+        var dateString = Lang.format( "$1$, $2$ $3$", [today.day_of_week, today.day, today.month]);
+        var timeString = Lang.format( "$1$:$2$", [today.hour, today.min]);
+        //clear screen
+        dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_BLACK);
+        dc.clear();
+        
+        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(120, 100, Graphics.FONT_LARGE, timeString, Graphics.TEXT_JUSTIFY_CENTER);
+        
+        dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(120, 60, Graphics.FONT_SMALL, dateString, Graphics.TEXT_JUSTIFY_CENTER);
+        
 
-        // Call the parent onUpdate function to redraw the layout
-        View.onUpdate(dc);
     }
 
     // Called when this View is removed from the screen. Save the
