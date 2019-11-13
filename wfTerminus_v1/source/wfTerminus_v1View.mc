@@ -19,20 +19,36 @@ class wfTerminus_v1View extends WatchUi.WatchFace {
     	if ((Toybox has :SensorHistory) && (Toybox.SensorHistory has :getPressureHistory)){
     		System.println("showPressure");
     		//var sensorIter = Toybox.SensorHistory.getPressureHistory({:order=>SensorHistory.ORDER_NEWEST_FIRST, :period=>new Time.Duration(4 * Time.Gregorian.SECONDS_PER_HOUR)});
-    		var sensorIter = Toybox.SensorHistory.getPressureHistory({:order=>SensorHistory.ORDER_OLDEST_FIRST, :period=>10});
-    		System.print("min: ");
-    		System.println(sensorIter.getMin());
-    		System.print("max: ");
-    		System.println(sensorIter.getMax());
-    		if (sensorIter != null) {
-    			for (var i=0; i<10;i++){ 
-    				System.println(sensorIter.next().data);
+    		var numIters = 60;
+    		var posX = 90;
+    		var posY = 190;
+    		var sensorIter = Toybox.SensorHistory.getPressureHistory({:order=>SensorHistory.ORDER_OLDEST_FIRST, :period=>numIters});
+    		
+    		if (sensorIter != null) {    			
+    			var prMin = sensorIter.getMin();
+    			var prMax = sensorIter.getMax();
+    			var range = prMax - prMin;
+    			var scale = 1.0;
+    			if (range >30){
+    				scale = (30/range);
     			}
+    			var ar = [];
+    			ar.add([posX,posY]);
+    			for (var i=0; i<numIters;i++){ 
+    				//System.println(sensorIter.next().data);
+    				ar.add([posX+i,(posY-(sensorIter.next().data-prMin)*scale)]);
+    			}
+    			ar.add([posX+numIters,posY]);
+    			ar.add([posX,posY]);
+    			System.println(ar.toString());
+    			dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
+    			dc.fillPolygon(ar);
 			}
     	} else {
     		System.println("Can't dsiplay Pressure History");
     	}
-    	//dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
+    	
+    	//
         //dc.drawText(120, 180, ftb24, "pressure", Graphics.TEXT_JUSTIFY_CENTER);
     }
 
