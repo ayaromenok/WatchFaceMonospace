@@ -1,9 +1,10 @@
 using Toybox.WatchUi;
-using Toybox.Graphics;
+using Toybox.Graphics as gfx;
 using Toybox.System;
 using Toybox.Lang;
 using Toybox.Time;
 using Toybox.Time.Gregorian;
+using Toybox.SensorHistory;
 
 class wfTerminus_v1View extends WatchUi.WatchFace {
 
@@ -12,6 +13,27 @@ class wfTerminus_v1View extends WatchUi.WatchFace {
 	
     function initialize() {
         WatchFace.initialize();
+    }
+    
+    function showPressure(dc){
+    	if ((Toybox has :SensorHistory) && (Toybox.SensorHistory has :getPressureHistory)){
+    		System.println("showPressure");
+    		//var sensorIter = Toybox.SensorHistory.getPressureHistory({:order=>SensorHistory.ORDER_NEWEST_FIRST, :period=>new Time.Duration(4 * Time.Gregorian.SECONDS_PER_HOUR)});
+    		var sensorIter = Toybox.SensorHistory.getPressureHistory({:order=>SensorHistory.ORDER_OLDEST_FIRST, :period=>10});
+    		System.print("min: ");
+    		System.println(sensorIter.getMin());
+    		System.print("max: ");
+    		System.println(sensorIter.getMax());
+    		if (sensorIter != null) {
+    			for (var i=0; i<10;i++){ 
+    				System.println(sensorIter.next().data);
+    			}
+			}
+    	} else {
+    		System.println("Can't dsiplay Pressure History");
+    	}
+    	//dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
+        //dc.drawText(120, 180, ftb24, "pressure", Graphics.TEXT_JUSTIFY_CENTER);
     }
 
     // Load your resources here
@@ -43,7 +65,7 @@ class wfTerminus_v1View extends WatchUi.WatchFace {
         dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
         dc.drawText(120, 60, ftb24, dateString, Graphics.TEXT_JUSTIFY_CENTER);
         
-
+		showPressure(dc);
     }
 
     // Called when this View is removed from the screen. Save the
