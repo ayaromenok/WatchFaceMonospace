@@ -7,8 +7,8 @@ using Toybox.Time.Gregorian;
 
 class wfTerminus_v1View extends WatchUi.WatchFace {
 
-	var tfb24 = null;
-	var tfb60d= null;
+	var ftb24 = null;
+	var ftb60d= null;
 	
     function initialize() {
         WatchFace.initialize();
@@ -17,8 +17,8 @@ class wfTerminus_v1View extends WatchUi.WatchFace {
     // Load your resources here
     function onLayout(dc) {
     //    setLayout(Rez.Layouts.WatchFace(dc));
-    	//ftb24 = WatchUi.loadResource(Rez.Fonts.ftb24);
-    	//ftb60d = WatchUi.loadResource(Rez.Fonts.ftb60d);
+    	ftb24 = WatchUi.loadResource(Rez.Fonts.ftb24);
+    	ftb60d = WatchUi.loadResource(Rez.Fonts.ftb60d);
     }
 
     // Called when this View is brought to the foreground. Restore
@@ -38,10 +38,10 @@ class wfTerminus_v1View extends WatchUi.WatchFace {
         dc.clear();
         
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(120, 100, Graphics.FONT_LARGE, timeString, Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(120, 100, ftb60d, timeString, Graphics.TEXT_JUSTIFY_CENTER);
         
         dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(120, 60, Graphics.FONT_SMALL, dateString, Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(120, 60, ftb24, dateString, Graphics.TEXT_JUSTIFY_CENTER);
         
 
     }
