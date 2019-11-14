@@ -18,38 +18,54 @@ class wfTerminus_v1View extends WatchUi.WatchFace {
     function showPressure(dc){
     	if ((Toybox has :SensorHistory) && (Toybox.SensorHistory has :getPressureHistory)){
     		System.println("showPressure");
-    		//var sensorIter = Toybox.SensorHistory.getPressureHistory({:order=>SensorHistory.ORDER_NEWEST_FIRST, :period=>new Time.Duration(4 * Time.Gregorian.SECONDS_PER_HOUR)});
-    		var numIters = 60;
+    		//looks liks barometer perions is 120sec or 30 measures in a hour 
+    		//but can't be more than 180 for VA3
+			//value appear in mm, float, x100
+    		var numIters = 180;
+    		var numIters_3 = numIters/3;
     		var posX = 90;
     		var posY = 190;
+    		var sizeY = 30;
+    		//var sensorIter = Toybox.SensorHistory.getPressureHistory({:order=>SensorHistory.ORDER_OLDEST_FIRST, :period=>new Time.Duration(timeH * Time.Gregorian.SECONDS_PER_HOUR)});
     		var sensorIter = Toybox.SensorHistory.getPressureHistory({:order=>SensorHistory.ORDER_OLDEST_FIRST, :period=>numIters});
     		
-    		if (sensorIter != null) {    			
+    		if (sensorIter != null) {
     			var prMin = sensorIter.getMin();
     			var prMax = sensorIter.getMax();
     			var range = prMax - prMin;
     			var scale = 1.0;
-    			if (range >30){
-    				scale = (30/range);
+    			//System.println(sensorIter.get().data);
+    			if (range > sizeY){
+    				scale = (sizeY/range);
     			}
     			var ar = [];
+    			var tmp = 0;
     			ar.add([posX,posY]);
-    			for (var i=0; i<numIters;i++){ 
+    			for (var i=0; i<numIters_3; i++){
     				//System.println(sensorIter.next().data);
-    				ar.add([posX+i,(posY-(sensorIter.next().data-prMin)*scale)]);
+    				tmp = sensorIter.next().data;
+    				//need to find to use only 1/3 of values    				
+    				ar.add([posX+i,(posY-(tmp-prMin)*scale)]);
+    				System.println(i);
+    				//use 1/3 of 180 values due to limit of dc.fillPolygon
+    				sensorIter.next();
+    				sensorIter.next();    				
     			}
-    			ar.add([posX+numIters,posY]);
+    			ar.add([posX+numIters_3,posY]);
     			ar.add([posX,posY]);
     			System.println(ar.toString());
+    			System.print("array size:");
+    			System.println(ar.size().toString());
     			dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
+    			//points array must be 64 or smaller.
     			dc.fillPolygon(ar);
+    			dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+    			dc.drawText(posX, posY, ftb24, (prMin/100).format("%04d").toString(), Graphics.TEXT_JUSTIFY_LEFT);
+    			dc.drawText(posX, posY-sizeY, ftb24, (prMax/100).format("%04d").toString(), Graphics.TEXT_JUSTIFY_LEFT);
 			}
     	} else {
     		System.println("Can't dsiplay Pressure History");
     	}
-    	
-    	//
-        //dc.drawText(120, 180, ftb24, "pressure", Graphics.TEXT_JUSTIFY_CENTER);
     }
 
     // Load your resources here
