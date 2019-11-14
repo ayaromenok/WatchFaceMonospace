@@ -1,4 +1,10 @@
 <fonts>
     <font id="ftb24" filename="tb24.fnt"/>
     <font id="ftb60d" filename="tb60d.fnt"/>
+    <font id="ftb12" filename="tb12.fnt"/>
+    <font id="ftb10" filename="tb10.fnt"/>
+    <font id="ftb14" filename="tb14.fnt"/>   
+    <font id="ftb16" filename="tb16.fnt"/>    
+    <font id="ftb20" filename="tb20.fnt"/>
+    <font id="fwebdings" filename="webdings.fnt"/>
 </fonts>

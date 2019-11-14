@@ -8,8 +8,14 @@ using Toybox.SensorHistory;
 
 class wfTerminus_v1View extends WatchUi.WatchFace {
 
+	var ftb10 = null;
+	var ftb12 = null;
+	var ftb14 = null;
+	var ftb16 = null;
+	var ftb20 = null;
 	var ftb24 = null;
 	var ftb60d= null;
+	var fwebdings = null;
 	
     function initialize() {
         WatchFace.initialize();
@@ -60,8 +66,8 @@ class wfTerminus_v1View extends WatchUi.WatchFace {
     			//points array must be 64 or smaller.
     			dc.fillPolygon(ar);
     			dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-    			dc.drawText(posX, posY, ftb24, (prMin/100).format("%04d").toString(), Graphics.TEXT_JUSTIFY_LEFT);
-    			dc.drawText(posX, posY-sizeY, ftb24, (prMax/100).format("%04d").toString(), Graphics.TEXT_JUSTIFY_LEFT);
+    			dc.drawText(posX+numIters_3, posY, ftb16, (prMin/100).format("%04d").toString(), Graphics.TEXT_JUSTIFY_LEFT);
+    			dc.drawText(posX+numIters_3, posY-sizeY, ftb16, (prMax/100).format("%04d").toString(), Graphics.TEXT_JUSTIFY_LEFT);
 			}
     	} else {
     		System.println("Can't dsiplay Pressure History");
@@ -71,8 +77,14 @@ class wfTerminus_v1View extends WatchUi.WatchFace {
     // Load your resources here
     function onLayout(dc) {
     //    setLayout(Rez.Layouts.WatchFace(dc));
+    	ftb10 = WatchUi.loadResource(Rez.Fonts.ftb10);
+    	ftb12 = WatchUi.loadResource(Rez.Fonts.ftb12);
+    	ftb14 = WatchUi.loadResource(Rez.Fonts.ftb14);
+    	ftb16 = WatchUi.loadResource(Rez.Fonts.ftb16);
+    	ftb20 = WatchUi.loadResource(Rez.Fonts.ftb20);
     	ftb24 = WatchUi.loadResource(Rez.Fonts.ftb24);
     	ftb60d = WatchUi.loadResource(Rez.Fonts.ftb60d);
+    	fwebdings = WatchUi.loadResource(Rez.Fonts.fwebdings); //check license for this font
     }
 
     // Called when this View is brought to the foreground. Restore
@@ -94,8 +106,27 @@ class wfTerminus_v1View extends WatchUi.WatchFace {
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
         dc.drawText(120, 100, ftb60d, timeString, Graphics.TEXT_JUSTIFY_CENTER);
         
-        dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(120, 60, ftb24, dateString, Graphics.TEXT_JUSTIFY_CENTER);
+        //webdigs: ABCDEFGIJ
+        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(90, 10, fwebdings, "A", Graphics.TEXT_JUSTIFY_CENTER);
+        dc.setColor(Graphics.COLOR_YELLOW, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(110, 10, fwebdings, "A", Graphics.TEXT_JUSTIFY_CENTER);
+        dc.setColor(Graphics.COLOR_BLUE, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(135, 10, fwebdings, "D", Graphics.TEXT_JUSTIFY_CENTER);
+        dc.setColor(Graphics.COLOR_YELLOW, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(160, 10, fwebdings, "A", Graphics.TEXT_JUSTIFY_CENTER);
+        dc.setColor(Graphics.COLOR_BLUE, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(160, 10, fwebdings, "D", Graphics.TEXT_JUSTIFY_CENTER);
+        //font 10..24pix bold
+        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+        
+        dc.drawText(120, 30, ftb20, dateString, Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(120, 50, ftb24, dateString, Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(80, 75, ftb10, dateString, Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(160, 75, ftb12, dateString, Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(65, 87, ftb14, dateString, Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(175, 87, ftb16, dateString, Graphics.TEXT_JUSTIFY_CENTER);
+        
         
 		showPressure(dc);
     }
