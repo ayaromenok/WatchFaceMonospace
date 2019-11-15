@@ -5,6 +5,7 @@ using Toybox.Lang;
 using Toybox.Time;
 using Toybox.Time.Gregorian;
 using Toybox.SensorHistory;
+using Toybox.Application.Storage as storage;
 
 class wfTerminus_v1View extends WatchUi.WatchFace {
 
@@ -19,6 +20,21 @@ class wfTerminus_v1View extends WatchUi.WatchFace {
 	
     function initialize() {
         WatchFace.initialize();
+    }
+    
+    function testStorage(dc){
+    	System.println("testStorage");
+    	
+    	var arr = [];
+    	var key = "key";
+    	var value = [];
+    	arr.add([10,10]);
+    	arr.add([11,11]);
+    	arr.add([12,12]);
+    	System.println(arr.toString());
+    	storage.setValue(key, arr);
+    	value = storage.getValue(key);
+    	System.println(value.toString());
     }
     
     function showPressure(dc){
@@ -127,8 +143,8 @@ class wfTerminus_v1View extends WatchUi.WatchFace {
         dc.drawText(65, 87, ftb14, dateString, Graphics.TEXT_JUSTIFY_CENTER);
         dc.drawText(175, 87, ftb16, dateString, Graphics.TEXT_JUSTIFY_CENTER);
         
-        
 		showPressure(dc);
+		testStorage(dc);
     }
 
     // Called when this View is removed from the screen. Save the
