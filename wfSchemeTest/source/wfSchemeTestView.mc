@@ -5,6 +5,7 @@ using Toybox.Lang;
 using Toybox.Application;
 
 class wfSchemeTestView extends WatchUi.WatchFace {
+	var fx = null;
 
     function initialize() {
         WatchFace.initialize();
@@ -13,6 +14,7 @@ class wfSchemeTestView extends WatchUi.WatchFace {
     // Load your resources here
     function onLayout(dc) {
         setLayout(Rez.Layouts.WatchFace(dc));
+        fx = WatchUi.loadResource(Rez.Fonts.fx);
     }
 
     // Called when this View is brought to the foreground. Restore
@@ -24,6 +26,7 @@ class wfSchemeTestView extends WatchUi.WatchFace {
     // Update the view
     function onUpdate(dc) {
         // Get the current time and format it correctly
+ /*       
         var timeFormat = "$1$:$2$";
         var clockTime = System.getClockTime();
         var hours = clockTime.hour;
@@ -46,6 +49,14 @@ class wfSchemeTestView extends WatchUi.WatchFace {
 
         // Call the parent onUpdate function to redraw the layout
         View.onUpdate(dc);
+//*/      
+		//use single bitmap for scheme test
+//*
+		dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_BLACK);
+        dc.clear(); 
+        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);
+        dc.drawText(0, 0, fx, "A", Graphics.TEXT_JUSTIFY_LEFT);
+//*/
     }
 
     // Called when this View is removed from the screen. Save the
