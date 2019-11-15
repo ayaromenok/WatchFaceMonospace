@@ -35,6 +35,9 @@ class wfTerminus_v1View extends WatchUi.WatchFace {
     	storage.setValue(key, arr);
     	value = storage.getValue(key);
     	System.println(value.toString());
+    	var ps = new pressureStorage();
+    	ps.init();
+    	ps.testDravingContext(dc);
     }
     
     function showPressure(dc){
